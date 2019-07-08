@@ -4,7 +4,17 @@ $user = "root";
 $password = "";
 $dbname = "blog";
 
-$dbconfig = mysqli_connect($host, $user, $password, $dbname);
+#$dbconfig = mysqli_connect($host, $user, $password, $dbname);
+
+try {
+    $conn = new PDO("mysql:host=$host;dbname=blog", $user, $password);
+    // set the PDO error mode to exception
+	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
+catch(PDOException $e)
+    {
+    echo "Connection failed: " . $e->getMessage();
+    }
 
 
 ?>
@@ -89,10 +99,17 @@ $dbconfig = mysqli_connect($host, $user, $password, $dbname);
 					<ul class="nav-menu">
                         
                         <?php
-                            $query = mysqli_query($dbconfig, "SELECT * FROM category");
-                            
-                            while($row = mysqli_fetch_array($query)){
-                                $id = $row['id'];
+							#$query = mysqli_query($dbconfig, "SELECT * FROM category");
+							$sql = 'SELECT * FROM category';
+							
+							$stmt = $conn->prepare($sql);
+							$stmt->execute();
+							#while($row = mysqli_fetch_array($query))
+
+							
+							while($row = $stmt->fetch(PDO::FETCH_BOTH)){
+								$id = $row['id'];
+								
                                 echo "<li><a href='category.php?category=$id'>".$row['name']."</a></li>";
                             }
                             
@@ -208,40 +225,45 @@ $dbconfig = mysqli_connect($host, $user, $password, $dbname);
 							</div>
 						</div>
 						<!-- post -->
+						<?php
+							#$query_1 = mysqli_query($dbconfig, "SELECT * FROM posts");
+							$sql_1 = "SELECT * FROM posts";
+							$stmt_1 = $conn->prepare($sql_1);
+							$stmt_1->execute();
+							#while($row_1 = mysqli_fetch_array($query_1))
+							while($row_1 = $stmt_1->fetch(PDO::FETCH_BOTH)){
+						?>
 						<div class="col-md-6">
 							<div class="post">
-								<a class="post-img" href="blog-post.html"><img src="./img/post-1.jpg" alt=""></a>
+								<a class="post-img" href="blog-post.html"><img src="<?php echo $row_1['image']?>" alt=""></a>
 								<div class="post-body">
 									<div class="post-category">
-										<a href="category.html">Travel</a>
+										<a href='<?php 
+													$cId = $row_1['categoryID'];
+													$pId = $row_1['postID'];
+													#$c_query = mysqli_query($dbconfig, "SELECT name FROM category WHERE id='$cId'");
+													$c_sql = "SELECT name FROM category WHERE id='$cId'";
+													$stmt_2 = $conn->prepare($c_sql);
+													$stmt_2->execute();
+													#$rows = mysqli_fetch_array($c_query);
+													$rows = $stmt_2->fetch(PDO::FETCH_BOTH);
+													echo "category.php?category=$cId";
+												?>'>
+										
+										<?php 
+											
+											echo $rows['name']
+										?></a>
 									</div>
-									<h3 class="post-title"><a href="blog-post.html">Sed ut perspiciatis, unde omnis iste natus error sit</a></h3>
+									<h3 class="post-title"><a href="<?php echo "blog-post.php?posts=$pId"?>"><?php echo $row_1['title']?></a></h3>
 									<ul class="post-meta">
-										<li><a href="author.html">John Doe</a></li>
-										<li>20 April 2018</li>
+										<li><a href="author.html"><?php echo $row_1['author']?></a></li>
+										<li><?php echo $row_1['postDate']?></li>
 									</ul>
 								</div>
 							</div>
 						</div>
-						<!-- /post -->
-
-						<!-- post -->
-						<div class="col-md-6">
-							<div class="post">
-								<a class="post-img" href="blog-post.html"><img src="./img/post-2.jpg" alt=""></a>
-								<div class="post-body">
-									<div class="post-category">
-										<a href="category.html">Technology</a>
-										<a href="category.html">Lifestyle</a>
-									</div>
-									<h3 class="post-title"><a href="blog-post.html">Ne bonorum praesent cum, labitur persequeris definitionem quo cu?</a></h3>
-									<ul class="post-meta">
-										<li><a href="author.html">John Doe</a></li>
-										<li>20 April 2018</li>
-									</ul>
-								</div>
-							</div>
-						</div>
+						<?php } ?>
 						<!-- /post -->
 
 						<div class="clearfix visible-md visible-lg"></div>
