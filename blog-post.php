@@ -117,7 +117,7 @@ $row = $stmt->fetch(PDO::FETCH_BOTH);
                             while($row_1 = $stmt_1->fetch(PDO::FETCH_BOTH)){
 								$id_1 = $row_1['id'];
 								
-                                echo "<li><a href='category.php?category=$id'>".$row_1['name']."</a></li>";
+                                echo "<li><a href='category.php?category=$id_1'>".$row_1['name']."</a></li>";
                             }
                             
                         ?>    

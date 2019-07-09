@@ -227,7 +227,7 @@ catch(PDOException $e)
 						<!-- post -->
 						<?php
 							#$query_1 = mysqli_query($dbconfig, "SELECT * FROM posts");
-							$sql_1 = "SELECT * FROM posts";
+							$sql_1 = "SELECT * FROM posts LIMIT 3";
 							$stmt_1 = $conn->prepare($sql_1);
 							$stmt_1->execute();
 							#while($row_1 = mysqli_fetch_array($query_1))
@@ -235,7 +235,7 @@ catch(PDOException $e)
 						?>
 						<div class="col-md-6">
 							<div class="post">
-								<a class="post-img" href="blog-post.html"><img src="<?php echo $row_1['image']?>" alt=""></a>
+								<a class="post-img" href="<?php echo "blog-post.php?posts=$pId"?>"><img src="<?php echo $row_1['image']?>" alt=""></a>
 								<div class="post-body">
 									<div class="post-category">
 										<a href='<?php 
@@ -251,7 +251,6 @@ catch(PDOException $e)
 												?>'>
 										
 										<?php 
-											
 											echo $rows['name']
 										?></a>
 									</div>
