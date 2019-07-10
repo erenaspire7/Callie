@@ -175,7 +175,7 @@ $row = $stmt->fetch(PDO::FETCH_BOTH);
                     
                     <!-- post -->
                     <?php
-                        $sql_2 = "SELECT * FROM posts WHERE categoryID = $row[id] ORDER BY postDate DESC";
+                        $sql_2 = "SELECT * FROM posts WHERE categoryID = '$id' ORDER BY postDate DESC";
 						$stmt_2 = $conn->prepare($sql_2);
 						$stmt_2->execute();
 						#while($row_1 = mysqli_fetch_array($query_1))
@@ -215,7 +215,7 @@ $row = $stmt->fetch(PDO::FETCH_BOTH);
 					<div class="row">
                         <!-- post -->
                         <?php
-                            $sql_3 = "SELECT * FROM posts WHERE categoryID = $row[id] AND postDate < (SELECT MAX(postDate) FROM posts WHERE categoryID = $row[id]) ORDER BY postDate DESC LIMIT 4";
+                            $sql_3 = "SELECT * FROM posts WHERE categoryID = '$id' AND postDate < (SELECT MAX(postDate) FROM posts WHERE categoryID = $row[id]) ORDER BY postDate DESC LIMIT 4";
                             $stmt_4 = $conn->prepare($sql_3);
                             $stmt_4->execute();
                     
